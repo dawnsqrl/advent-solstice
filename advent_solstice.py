@@ -33,6 +33,7 @@ class AdventSolstice(Scene):
                 event[1]
             ))
         self.epoch_length = options['epoch_length']
+        self.epoch_year_length = options['epoch_year_length']
         self.epoch_extension = options['epoch_extension']
         self.stroke_width = options['stroke_width']
         self.stroke_opacity = options['stroke_opacity']
@@ -48,6 +49,7 @@ class AdventSolstice(Scene):
         self.text_buffer_depth = options['text_buffer_depth']
         self.text_right_buffer_modifier = options['text_right_buffer_modifier']
         self.global_scale = options['global_scale']
+        self.use_hex_day_count = options['use_hex_day_count']
         self.is_birthday_marked = options['is_birthday_marked']
         self.do_row_kerning = options['do_row_kerning']
         self.max_row_length = -1
@@ -233,9 +235,17 @@ class AdventSolstice(Scene):
         return this_row
 
     def construct(self):
-        duration_day = (self.today - self.birthday).days
-        duration_epoch = ceil(duration_day / self.epoch_length)
-        row_count = duration_epoch + self.epoch_extension
+        if self.epoch_year_length > 0:
+            row_count = self.epoch_extension
+            current_time = self.birthday
+            while current_time < self.today:
+                row_count += 1
+                current_time = date(current_time.year + self.epoch_year_length,
+                                    current_time.month, current_time.day)
+        else:
+            duration_day = (self.today - self.birthday).days
+            duration_epoch = ceil(duration_day / self.epoch_length)
+            row_count = duration_epoch + self.epoch_extension
         calendar = VGroup()
         last_row = None
         epoch_start_times = []
@@ -243,10 +253,17 @@ class AdventSolstice(Scene):
         legend_epoch_start = VGroup()
         legend_epoch_end = VGroup()
         for this_epoch in range(0, row_count):
-            this_epoch_start_time = self.birthday if this_epoch == 0 \
-                else self.birthday + timedelta(days=this_epoch * self.epoch_length + 1)
+            if self.epoch_year_length > 0:
+                this_epoch_start_time = self.birthday if this_epoch == 0 \
+                    else date(self.birthday.year + this_epoch * self.epoch_year_length,
+                              self.birthday.month, self.birthday.day) + timedelta(days=1)
+                this_epoch_end_time = date(self.birthday.year + (this_epoch + 1) * self.epoch_year_length,
+                                           self.birthday.month, self.birthday.day)
+            else:
+                this_epoch_start_time = self.birthday if this_epoch == 0 \
+                    else self.birthday + timedelta(days=this_epoch * self.epoch_length + 1)
+                this_epoch_end_time = self.birthday + timedelta(days=(this_epoch + 1) * self.epoch_length)
             epoch_start_times.append(this_epoch_start_time)
-            this_epoch_end_time = self.birthday + timedelta(days=(this_epoch + 1) * self.epoch_length)
             epoch_end_times.append(this_epoch_end_time)
             if last_row is None:
                 last_row = self.calendar_row(this_epoch_start_time, this_epoch_end_time, True)
@@ -267,10 +284,12 @@ class AdventSolstice(Scene):
                      fill_color=self.text_color, fill_opacity=self.text_opacity)
                 .next_to(this_row, LEFT, self.text_buffer_depth, aligned_edge=LEFT)
             )
+            day_count = (epoch_end_times[row_index] - self.birthday).days
+            if self.use_hex_day_count:
+                day_count = hex(day_count)
             legend_epoch_end.add(
                 Text(str(epoch_end_times[row_index]).replace('-', '.') +
-                     f' \u2192 {(epoch_end_times[row_index] - self.birthday).days} days',
-                     font=self.text_font, font_size=self.text_size,
+                     f' \u2192 {day_count} days', font=self.text_font, font_size=self.text_size,
                      fill_color=self.text_color, fill_opacity=self.text_opacity)
                 .next_to(this_row, RIGHT, self.text_buffer_depth * self.text_right_buffer_modifier,
                          aligned_edge=LEFT)
@@ -283,7 +302,8 @@ class AdventSolstice(Scene):
             Text(f'day {(self.today - self.birthday).days} of existence',
                  font=self.text_font, font_size=self.text_size,
                  fill_color=self.text_color, fill_opacity=self.text_opacity / 2)
-            .next_to(calendar, UP, self.text_buffer_depth / 6, aligned_edge=RIGHT)
+            .next_to(calendar, DOWN if self.epoch_length < 540 or self.epoch_year_length == 1 else UP,
+                     self.text_buffer_depth / 6, aligned_edge=RIGHT)
         )
         advent_solstice = VGroup(calendar, legend_epoch_start, legend_epoch_end, legend_title)
         self.add(advent_solstice.scale(self.global_scale).move_to(ORIGIN))
@@ -314,6 +334,7 @@ if __name__ == '__main__':
                 ((2021, 8, 31), ('#577C8A', '#94D3EB'))
             ],
             'epoch_length': 1e3,
+            'epoch_year_length': 0,
             'epoch_extension': 2,
             'stroke_width': 2,
             'stroke_opacity': 0.6,
@@ -329,6 +350,7 @@ if __name__ == '__main__':
             'text_buffer_depth': 1,
             'text_right_buffer_modifier': 6,
             'global_scale': 0.8,
+            'use_hex_day_count': False,
             'is_birthday_marked': True,
             'do_row_kerning': False
         })
