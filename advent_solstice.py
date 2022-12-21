@@ -46,6 +46,7 @@ class AdventSolstice(Scene):
         self.text_opacity = options['text_opacity']
         self.text_size = options['text_size']
         self.text_buffer_depth = options['text_buffer_depth']
+        self.text_right_buffer_modifier = options['text_right_buffer_modifier']
         self.global_scale = options['global_scale']
         self.is_birthday_marked = options['is_birthday_marked']
         self.do_row_kerning = options['do_row_kerning']
@@ -271,7 +272,8 @@ class AdventSolstice(Scene):
                      f' \u2192 {(epoch_end_times[row_index] - self.birthday).days} days',
                      font=self.text_font, font_size=self.text_size,
                      fill_color=self.text_color, fill_opacity=self.text_opacity)
-                .next_to(this_row, RIGHT, self.text_buffer_depth * 6, aligned_edge=LEFT)
+                .next_to(this_row, RIGHT, self.text_buffer_depth * self.text_right_buffer_modifier,
+                         aligned_edge=LEFT)
             )
         legend_title = VGroup(
             Text('today is ' + str(self.today).replace('-', '.'),
@@ -325,6 +327,7 @@ if __name__ == '__main__':
             'text_opacity': 0.5,
             'text_size': 16,
             'text_buffer_depth': 1,
+            'text_right_buffer_modifier': 6,
             'global_scale': 0.8,
             'is_birthday_marked': True,
             'do_row_kerning': False
