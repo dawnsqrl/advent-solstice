@@ -1,7 +1,7 @@
 from manim import *
 from datetime import date, timedelta
 from math import ceil
-import numpy as np
+from numpy import array
 
 
 def parse_date(time: tuple[int, int, int]) -> date:
@@ -62,68 +62,68 @@ class AdventSolstice(Scene):
         marker_radius = block_width / 4
         if q1 is not None:
             this_block.add(Square(block_width, fill_color=q1[0], fill_opacity=self.block_opacity,
-                                  stroke_opacity=0).shift(np.array([-1, 1, 0])))
+                                  stroke_opacity=0).shift(array([-1, 1, 0])))
             this_block.add(Elbow(block_width, angle=PI / 2, stroke_width=self.stroke_width,
                                  stroke_color=q1[1], stroke_opacity=self.stroke_opacity))
             if q2 is None:
                 this_block.add(Elbow(block_width, angle=PI, stroke_width=self.stroke_width,
                                      stroke_color=q1[1], stroke_opacity=self.stroke_opacity)
-                               .shift(np.array([0, 2, 0])))
+                               .shift(array([0, 2, 0])))
             if q3 is None:
                 this_block.add(Elbow(block_width, angle=0, stroke_width=self.stroke_width,
                                      stroke_color=q1[1], stroke_opacity=self.stroke_opacity)
-                               .shift(np.array([-2, 0, 0])))
+                               .shift(array([-2, 0, 0])))
         else:
             this_block.add(Elbow(block_width, angle=PI / 2, stroke_width=self.stroke_width,
                                  stroke_color=self.none_stroke_color,
                                  stroke_opacity=self.none_stroke_opacity))
         if q2 is not None:
             this_block.add(Square(block_width, fill_color=q2[0], fill_opacity=self.block_opacity,
-                                  stroke_opacity=0).shift(np.array([-1, -1, 0])))
+                                  stroke_opacity=0).shift(array([-1, -1, 0])))
             this_block.add(Elbow(block_width, angle=PI, stroke_width=self.stroke_width,
                                  stroke_color=q2[1], stroke_opacity=self.stroke_opacity))
             if q1 is None:
                 this_block.add(Elbow(block_width, angle=PI / 2, stroke_width=self.stroke_width,
                                      stroke_color=q2[1], stroke_opacity=self.stroke_opacity)
-                               .shift(np.array([0, -2, 0])))
+                               .shift(array([0, -2, 0])))
             if q4 is None:
                 this_block.add(Elbow(block_width, angle=-PI / 2, stroke_width=self.stroke_width,
                                      stroke_color=q2[1], stroke_opacity=self.stroke_opacity)
-                               .shift(np.array([-2, 0, 0])))
+                               .shift(array([-2, 0, 0])))
         else:
             this_block.add(Elbow(block_width, angle=PI, stroke_width=self.stroke_width,
                                  stroke_color=self.none_stroke_color,
                                  stroke_opacity=self.none_stroke_opacity))
         if q3 is not None:
             this_block.add(Square(block_width, fill_color=q3[0], fill_opacity=self.block_opacity,
-                                  stroke_opacity=0).shift(np.array([1, 1, 0])))
+                                  stroke_opacity=0).shift(array([1, 1, 0])))
             this_block.add(Elbow(block_width, angle=0, stroke_width=self.stroke_width,
                                  stroke_color=q3[1], stroke_opacity=self.stroke_opacity))
             if q1 is None:
                 this_block.add(Elbow(block_width, angle=PI / 2, stroke_width=self.stroke_width,
                                      stroke_color=q3[1], stroke_opacity=self.stroke_opacity)
-                               .shift(np.array([2, 0, 0])))
+                               .shift(array([2, 0, 0])))
             if q4 is None:
                 this_block.add(Elbow(block_width, angle=-PI / 2, stroke_width=self.stroke_width,
                                      stroke_color=q3[1], stroke_opacity=self.stroke_opacity)
-                               .shift(np.array([0, 2, 0])))
+                               .shift(array([0, 2, 0])))
         else:
             this_block.add(Elbow(block_width, angle=0, stroke_width=self.stroke_width,
                                  stroke_color=self.none_stroke_color,
                                  stroke_opacity=self.none_stroke_opacity))
         if q4 is not None:
             this_block.add(Square(block_width, fill_color=q4[0], fill_opacity=self.block_opacity,
-                                  stroke_opacity=0).shift(np.array([1, -1, 0])))
+                                  stroke_opacity=0).shift(array([1, -1, 0])))
             this_block.add(Elbow(block_width, angle=-PI / 2, stroke_width=self.stroke_width,
                                  stroke_color=q4[1], stroke_opacity=self.stroke_opacity))
             if q2 is None:
                 this_block.add(Elbow(block_width, angle=PI, stroke_width=self.stroke_width,
                                      stroke_color=q4[1], stroke_opacity=self.stroke_opacity)
-                               .shift(np.array([2, 0, 0])))
+                               .shift(array([2, 0, 0])))
             if q3 is None:
                 this_block.add(Elbow(block_width, angle=0, stroke_width=self.stroke_width,
                                      stroke_color=q4[1], stroke_opacity=self.stroke_opacity)
-                               .shift(np.array([0, -2, 0])))
+                               .shift(array([0, -2, 0])))
         else:
             this_block.add(Elbow(block_width, angle=-PI / 2, stroke_width=self.stroke_width,
                                  stroke_color=self.none_stroke_color,
@@ -134,39 +134,43 @@ class AdventSolstice(Scene):
                 if q1 is not None:
                     this_block.add(Circle(marker_radius, stroke_width=0, fill_color=q1[1],
                                           fill_opacity=self.stroke_opacity)
-                                   .shift(np.array([-1, 1, 0])))
+                                   .shift(array([-1, 1, 0])))
                 else:
-                    this_block.add(Circle(marker_radius, stroke_width=0, fill_color=self.none_stroke_color,
+                    this_block.add(Circle(marker_radius, stroke_width=0,
+                                          fill_color=self.none_stroke_color,
                                           fill_opacity=self.none_stroke_opacity)
-                                   .shift(np.array([-1, 1, 0])))
+                                   .shift(array([-1, 1, 0])))
             elif birthday_quarter == 2:
                 if q2 is not None:
                     this_block.add(Circle(marker_radius, stroke_width=0, fill_color=q2[1],
                                           fill_opacity=self.stroke_opacity)
-                                   .shift(np.array([-1, -1, 0])))
+                                   .shift(array([-1, -1, 0])))
                 else:
-                    this_block.add(Circle(marker_radius, stroke_width=0, fill_color=self.none_stroke_color,
+                    this_block.add(Circle(marker_radius, stroke_width=0,
+                                          fill_color=self.none_stroke_color,
                                           fill_opacity=self.none_stroke_opacity)
-                                   .shift(np.array([-1, -1, 0])))
+                                   .shift(array([-1, -1, 0])))
             elif birthday_quarter == 3:
                 if q3 is not None:
                     this_block.add(Circle(marker_radius, stroke_width=0, fill_color=q3[1],
                                           fill_opacity=self.stroke_opacity)
-                                   .shift(np.array([1, 1, 0])))
+                                   .shift(array([1, 1, 0])))
                 else:
-                    this_block.add(Circle(marker_radius, stroke_width=0, fill_color=self.none_stroke_color,
+                    this_block.add(Circle(marker_radius, stroke_width=0,
+                                          fill_color=self.none_stroke_color,
                                           fill_opacity=self.none_stroke_opacity)
-                                   .shift(np.array([1, 1, 0])))
+                                   .shift(array([1, 1, 0])))
             elif birthday_quarter == 4:
                 if q4 is not None:
                     this_block.add(Circle(marker_radius, stroke_width=0, fill_color=q4[1],
                                           fill_opacity=self.stroke_opacity)
-                                   .shift(np.array([1, -1, 0])))
+                                   .shift(array([1, -1, 0])))
 
                 else:
-                    this_block.add(Circle(marker_radius, stroke_width=0, fill_color=self.none_stroke_color,
+                    this_block.add(Circle(marker_radius, stroke_width=0,
+                                          fill_color=self.none_stroke_color,
                                           fill_opacity=self.none_stroke_opacity)
-                                   .shift(np.array([1, -1, 0])))
+                                   .shift(array([1, -1, 0])))
         return this_block.scale(self.block_scale)
 
     def get_quarter_color(self, quarter_time: date) -> tuple[str, str] | None:
@@ -189,16 +193,17 @@ class AdventSolstice(Scene):
         q2 = self.get_quarter_color(date(start_time.year, start_time.month, 2))
         q3 = self.get_quarter_color(date(start_time.year, start_time.month, 3))
         q4 = self.get_quarter_color(date(start_time.year, start_time.month, 4))
+        starts_in_birthday_month = start_time.month == self.birthday.month
         if start_quarter == 1:
-            last_block = self.draw_block(q1, q2, q3, q4, start_time.month == self.birthday.month)
+            last_block = self.draw_block(q1, q2, q3, q4, starts_in_birthday_month)
         elif start_quarter == 2:
-            last_block = self.draw_block(None, q2, q3, q4, start_time.month == self.birthday.month)
+            last_block = self.draw_block(None, q2, q3, q4, starts_in_birthday_month)
         elif start_quarter == 3:
-            last_block = self.draw_block(None, None, q3, q4, start_time.month == self.birthday.month)
+            last_block = self.draw_block(None, None, q3, q4, starts_in_birthday_month)
         elif start_quarter == 4:
-            last_block = self.draw_block(None, None, None, q4, start_time.month == self.birthday.month)
+            last_block = self.draw_block(None, None, None, q4, starts_in_birthday_month)
         else:
-            last_block = self.draw_block(None, None, None, None, start_time.month == self.birthday.month)
+            last_block = self.draw_block(None, None, None, None, starts_in_birthday_month)
         this_row.add(last_block)
         current_time = advance_month(start_time)
         while current_time.year < end_time.year or (current_time.year == end_time.year
@@ -217,20 +222,21 @@ class AdventSolstice(Scene):
         q2 = self.get_quarter_color(date(end_time.year, end_time.month, 2))
         q3 = self.get_quarter_color(date(end_time.year, end_time.month, 3))
         q4 = self.get_quarter_color(date(end_time.year, end_time.month, 4))
+        ends_in_birthday_month = end_time.month == self.birthday.month
         if end_quarter == 1:
-            last_block = self.draw_block(q1, None, None, None, end_time.month == self.birthday.month) \
+            last_block = self.draw_block(q1, None, None, None, ends_in_birthday_month) \
                 .next_to(last_block, RIGHT, buff=self.block_buffer_depth)
         elif end_quarter == 2:
-            last_block = self.draw_block(q1, q2, None, None, end_time.month == self.birthday.month) \
+            last_block = self.draw_block(q1, q2, None, None, ends_in_birthday_month) \
                 .next_to(last_block, RIGHT, buff=self.block_buffer_depth)
         elif end_quarter == 3:
-            last_block = self.draw_block(q1, q2, q3, None, end_time.month == self.birthday.month) \
+            last_block = self.draw_block(q1, q2, q3, None, ends_in_birthday_month) \
                 .next_to(last_block, RIGHT, buff=self.block_buffer_depth)
         elif end_quarter == 4:
-            last_block = self.draw_block(q1, q2, q3, q4, end_time.month == self.birthday.month) \
+            last_block = self.draw_block(q1, q2, q3, q4, ends_in_birthday_month) \
                 .next_to(last_block, RIGHT, buff=self.block_buffer_depth)
         else:
-            last_block = self.draw_block(None, None, None, None, end_time.month == self.birthday.month)
+            last_block = self.draw_block(None, None, None, None, ends_in_birthday_month)
         this_row.add(last_block)
         return this_row
 

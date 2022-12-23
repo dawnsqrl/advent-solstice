@@ -5,3 +5,4 @@ texts
 videos
 config.cfg
 *.png
+!advent_solstice.png
