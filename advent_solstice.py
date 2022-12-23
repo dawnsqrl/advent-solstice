@@ -258,7 +258,7 @@ class AdventSolstice(Scene):
         epoch_end_times = []
         legend_epoch_start = VGroup()
         legend_epoch_end = VGroup()
-        for this_epoch in range(0, row_count):
+        for this_epoch in range(row_count):
             if self.epoch_year_length > 0:
                 this_epoch_start_time = self.birthday if this_epoch == 0 \
                     else date(self.birthday.year + this_epoch * self.epoch_year_length,
@@ -300,13 +300,15 @@ class AdventSolstice(Scene):
                 .next_to(this_row, RIGHT, self.text_buffer_depth * self.text_right_buffer_modifier,
                          aligned_edge=LEFT)
             )
+        day_count = (self.today - self.birthday).days
+        if self.use_hex_day_count:
+            day_count = hex(day_count)
         legend_title = VGroup(
             Text('today is ' + str(self.today).replace('-', '.'),
                  font=self.text_font, font_size=self.text_size,
                  fill_color=self.text_color, fill_opacity=self.text_opacity / 2)
             .next_to(calendar, UP, self.text_buffer_depth / 6, aligned_edge=LEFT),
-            Text(f'day {(self.today - self.birthday).days} of existence',
-                 font=self.text_font, font_size=self.text_size,
+            Text(f'day {day_count} of existence', font=self.text_font, font_size=self.text_size,
                  fill_color=self.text_color, fill_opacity=self.text_opacity / 2)
             .next_to(calendar, DOWN if self.epoch_length < 540 or self.epoch_year_length == 1 else UP,
                      self.text_buffer_depth / 6, aligned_edge=RIGHT)
